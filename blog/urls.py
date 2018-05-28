@@ -23,6 +23,9 @@ app_name = "blog"
 
 urlpatterns = [
     path('', PostView.post_list, name='main'),
-    path('show/<int:id>', PostView.show_post, name='show_post'),
-    path('comment', PostView.do_comment, name='do_comment')
+    path('post/<int:id>', PostView.show_post, name='show_post'),
+    path('comment', PostView.do_comment, name='do_comment'),
+    path('post/new/', PostView.post_new, name='post_new'),
+    path('post/<int:id>/edit', PostView.post_edit, name='post_new'),
+
 ]

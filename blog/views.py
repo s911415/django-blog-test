@@ -2,6 +2,7 @@ from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 
 from blog.models import *
+from .forms import PostForm
 
 
 class PostView:
@@ -31,3 +32,30 @@ class PostView:
             return redirect("blog:show_post", id=id)
 
         return Http404("404 Not Found")
+
+    @staticmethod
+    def post_new(request):
+        if request.method == "POST":
+            form = PostForm(request.POST)
+            if form.is_valid():
+                post = form.save(commit=False)
+                post.author = request.user
+                post.save()
+                return redirect("blog:show_post", id=post.pk)
+        else:
+            form = PostForm()
+        return render(request, 'blog/post_edit.html', {'form': form})
+
+    @staticmethod
+    def post_edit(request, id):
+        post = get_object_or_404(Post, id=id)
+        if request.method == "POST":
+            form = PostForm(request.POST, instance=post)
+            if form.is_valid():
+                post = form.save(commit=False)
+                post.author = request.user
+                post.save()
+                return redirect('blog:show_post', id=post.id)
+        else:
+            form = PostForm(instance=post)
+            return render(request, 'blog/post_edit.html', {'form': form})
