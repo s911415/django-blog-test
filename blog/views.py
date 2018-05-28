@@ -9,7 +9,7 @@ class PostView:
     # Create your views here.
     @staticmethod
     def post_list(request):
-        posts = Post.objects.filter(published_date__isnull=False).order_by('-published_date').all()
+        posts = Post.objects.order_by('-published_date').all()
         return render(request, 'blog/post_list.html', {'posts': posts})
 
     @staticmethod
